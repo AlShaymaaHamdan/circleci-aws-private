@@ -50,7 +50,7 @@ workflows:
       - aws-ecr/build-and-push-image:
           repo: cicd
           tag: lts
-          dockerfile: dockerfile
+          dockerfile: Dockerfile
           path: .
           requires:
             - test
