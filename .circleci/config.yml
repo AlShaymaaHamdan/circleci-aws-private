@@ -20,7 +20,7 @@ jobs:
       - run:
           name: Login to AWS and run the Image
           command: |
-            ssh -o StrictHostKeyChecking=no -i "$HOME/.ssh/id_rsa" ubuntu@ec2-34-227-108-64.compute-1.amazonaws.com " ssh -o StrictHostKeyChecking=no -i \"$HOME/.ssh/id_rsa\" ubuntu@ec2-172-16-2-138.compute-1.amazonaws.com "curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" &&
+            ssh -o StrictHostKeyChecking=no -i "$HOME/.ssh/id_rsa" ubuntu@ec2-34-227-108-64.compute-1.amazonaws.com " ssh -o StrictHostKeyChecking=no -i "$HOME/.ssh/id_rsa" ubuntu@ec2-172-16-2-138.compute-1.amazonaws.com "curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" &&
             sudo apt install unzip &&
             unzip awscliv2.zip &&
             sudo ./aws/install &&
