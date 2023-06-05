@@ -12,7 +12,7 @@ jobs:
           docker_layer_caching: true
       - add_ssh_keys:
           fingerprints:
-            - "a4:f3:22:72:a1:64:11:73:d1:51:9b:31:5f:a8:30:88"
+            - "1f:33:03:cc:a9:50:72:57:f2:68:29:20:2c:12:37:8e"
   deploy:
     docker: 
       - image: docker:stable
@@ -20,8 +20,28 @@ jobs:
       - run:
           name: Login to AWS and run the Image
           command: |
-            ssh -o StrictHostKeyChecking=no -i "$HOME/.ssh/id_rsa" ubuntu@ec2-18-234-50-11.compute-1.amazonaws.com " aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin 564162621498.dkr.ecr.us-east-1.amazonaws.com &&
-            sudo docker run -d -p 3000:3000 --name test 564162621498.dkr.ecr.us-east-1.amazonaws.com/cicd:lts"    
+            ssh -o StrictHostKeyChecking=no -i "net-task.pem" ubuntu@34.227.108.64 " ssh -o StrictHostKeyChecking=no -i "net-task.pem" ubuntu@172.16.2.138 "curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" &&
+            sudo apt install unzip &&
+            unzip awscliv2.zip &&
+            sudo ./aws/install &&
+            sudo apt-get update &&
+            sudo apt-get install ca-certificates curl gnupg &&
+            sudo install -m 0755 -d /etc/apt/keyrings &&
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg &&
+            sudo chmod a+r /etc/apt/keyrings/docker.gpg &&
+            echo \
+            "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+            "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+            sudo tee /etc/apt/sources.list.d/docker.list > /dev/null &&
+            sudo apt-get update &&
+            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin &&
+            aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin 564162621498.dkr.ecr.us-east-1.amazonaws.com &&
+            sudo docker run -d -p 3000:3000 --name test 564162621498.dkr.ecr.us-east-1.amazonaws.com/cicd:lts
+            " "
+      - run:
+          command: |
+            ssh -o StrictHostKeyChecking=no -i "net-task.pem" ubuntu@34.227.108.64 " aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin 564162621498.dkr.ecr.us-east-1.amazonaws.com &&
+            sudo docker run -d -p 3000:3000 --name test 564162621498.dkr.ecr.us-east-1.amazonaws.com/cicd:lts"
 workflows:
   version: 2
   build:
@@ -30,7 +50,7 @@ workflows:
       - aws-ecr/build-and-push-image:
           repo: cicd
           tag: lts
-          dockerfile: Dockerfile
+          dockerfile: dockerfile
           path: .
           requires:
             - test
