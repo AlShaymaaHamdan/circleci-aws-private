@@ -20,7 +20,7 @@ jobs:
       - run:
           name: Login to AWS and run the Image
           command: |
-            ssh -o StrictHostKeyChecking=no -i "$HOME/.ssh/id_rsa" ubuntu@ec2-34-227-108-64.compute-1.amazonaws.com " ssh -o StrictHostKeyChecking=no -i \"$HOME/.ssh/id_rsa\" ubuntu@ec2-172-16-2-138.compute-1.amazonaws.com \"curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" &&
+            ssh -o StrictHostKeyChecking=no -i "$HOME/.ssh/id_rsa" ubuntu@ec2-34-227-108-64.compute-1.amazonaws.com " ssh -o StrictHostKeyChecking=no -i "$HOME/.ssh/id_rsa" ubuntu@ec2-172-16-2-138.compute-1.amazonaws.com "curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" &&
             sudo apt install unzip &&
             unzip awscliv2.zip &&
             sudo ./aws/install &&
@@ -37,7 +37,7 @@ jobs:
             sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin &&
             aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin 564162621498.dkr.ecr.us-east-1.amazonaws.com &&
             sudo docker run -d -p 3000:3000 --name test 564162621498.dkr.ecr.us-east-1.amazonaws.com/cicd:lts
-            \" "
+            " "
 workflows:
   version: 2
   build:
