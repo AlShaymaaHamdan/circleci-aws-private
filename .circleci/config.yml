@@ -13,6 +13,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "29:ea:02:76:7f:b8:10:e7:ed:55:45:f5:d9:84:6a:8c"
+            - "1f:33:03:cc:a9:50:72:57:f2:68:29:20:2c:12:37:8e"
   deploy:
     docker: 
       - image: docker:stable
